@@ -39,7 +39,7 @@ export function ChatInterface({ tenantId, userId }: { tenantId: string, userId: 
         setLoading(true);
 
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch('/api/py/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -51,34 +51,14 @@ export function ChatInterface({ tenantId, userId }: { tenantId: string, userId: 
             });
 
             if (!response.ok) throw new Error(response.statusText);
+            const data = await response.json();
 
-            // Handle streaming response
-            const reader = response.body?.getReader();
-            if (!reader) return;
-
-            const assistantMessage: Message = { role: 'assistant', content: '' };
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: data.content,
+                code_snippet: data.code_snippet
+            };
             setMessages(prev => [...prev, assistantMessage]);
-
-            // Read the stream
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                const chunk = new TextDecoder().decode(value);
-                // Simple streaming parsing (assuming raw text for now, but API might send JSON chunks)
-                // For simplicity in this demo, let's assume the API sends raw text chunks of the content.
-
-                // Actually, better to accumulate and update state.
-                // If API sends structured events, we parse.
-                // Let's assume API sends text for now.
-
-                assistantMessage.content += chunk;
-                setMessages(prev => {
-                    const newMessages = [...prev];
-                    newMessages[newMessages.length - 1] = { ...assistantMessage };
-                    return newMessages;
-                });
-            }
 
             // After stream, if we need to update session ID from response headers or something, we could.
             // But simpler: API returns session ID in first chunk? No, too complex.
