@@ -13,38 +13,34 @@
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
+    z-index: 50;
     transition: width 0.2s ease;
 }
 
 .sidebarHeader {
-    height: 64px;
-    display: flex;
-    align-items: center;
-    padding: 0 1.5rem;
-    border-bottom: 1px solid var(--border);
+    padding: 2rem 1.5rem;
 }
 
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     font-weight: 700;
     font-size: 1.125rem;
     color: var(--foreground);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .logoIcon {
-    width: 24px;
-    height: 24px;
-    background-color: var(--color-primary);
-    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .nav {
     flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
@@ -54,27 +50,32 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
     color: var(--text-muted);
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     font-weight: 500;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .navItem:hover {
-    background-color: var(--background);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--foreground);
+    transform: translateX(4px);
 }
 
 .navItemActive {
-    background-color: var(--background);
+    background: rgba(124, 58, 237, 0.1);
     color: var(--color-primary);
     font-weight: 600;
 }
 
+.navItemActive:hover {
+    background: rgba(124, 58, 237, 0.15);
+}
+
 .sidebarFooter {
-    padding: 1rem;
+    padding: 1.5rem;
     border-top: 1px solid var(--border);
 }
 
@@ -82,6 +83,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    background: var(--background);
     overflow: hidden;
 }
 
@@ -92,7 +95,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    background-color: var(--background);
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 40;
 }
 
 .content {
