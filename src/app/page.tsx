@@ -24,5 +24,5 @@ export default async function Home() {
     redirect('/datasets')
   }
 
-  return <LandingPage />
+  return <div>Landing Page (Development)</div>
 }
