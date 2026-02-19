@@ -220,16 +220,21 @@
 }
 
 .featureCard {
-    padding: 2.5rem;
-    background: var(--card-bg);
+    background-color: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    transition: transform 0.3s, border-color 0.3s;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .featureCard:hover {
     transform: translateY(-5px);
     border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
 }
 
 .featureCard h3 {

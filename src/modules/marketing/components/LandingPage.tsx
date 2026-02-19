@@ -61,18 +61,18 @@ export function LandingPage() {
 
             <section id="features" className={styles.featuresSection}>
                 <div className={styles.featureGrid}>
-                    <div className={styles.featureCard}>
+                    <Link href="/datasets" className={styles.featureCard}>
                         <h3>Instant Analysis</h3>
                         <p>Upload CSV/Excel files and get immediate summaries through natural language.</p>
-                    </div>
-                    <div className={styles.featureCard}>
+                    </Link>
+                    <Link href="/analysis" className={styles.featureCard}>
                         <h3>Visual Intelligence</h3>
                         <p>Automatically generate beautiful, interactive charts and dashboards.</p>
-                    </div>
-                    <div className={styles.featureCard}>
+                    </Link>
+                    <Link href="/chat" className={styles.featureCard}>
                         <h3>Python Integration</h3>
                         <p>Leverage the power of Python for complex statistical analysis and modeling.</p>
-                    </div>
+                    </Link>
                 </div>
             </section>
         </div>
