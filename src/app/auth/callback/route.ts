@@ -12,11 +12,50 @@ export async function GET(request: Request) {
     if (code) {
         const supabase = await createClient()
         const { error } = await supabase.auth.exchangeCodeForSession(code)
+
         if (!error) {
-            const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
+            // Auto-provisioning logic
+            const { data: { user } } = await supabase.auth.getUser()
+
+            if (user) {
+                // Check if user has any tenants
+                const { data: memberships } = await supabase
+                    .from('memberships')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .limit(1)
+
+                if (!memberships || memberships.length === 0) {
+                    // Create default tenant
+                    const tenantName = `${user.email?.split('@')[0]}'s Workspace`
+                    const slug = `${user.email?.split('@')[0]}-personal-${Math.random().toString(36).substring(7)}`
+
+                    const { data: tenant } = await supabase
+                        .from('tenants')
+                        .insert({
+                            name: tenantName,
+                            slug: slug,
+                            created_by: user.id
+                        })
+                        .select()
+                        .single()
+
+                    if (tenant) {
+                        // Create membership
+                        await supabase
+                            .from('memberships')
+                            .insert({
+                                user_id: user.id,
+                                tenant_id: tenant.id,
+                                role: 'owner'
+                            })
+                    }
+                }
+            }
+
+            const forwardedHost = request.headers.get('x-forwarded-host')
             const isLocalEnv = process.env.NODE_ENV === 'development'
             if (isLocalEnv) {
-                // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
                 return NextResponse.redirect(`${origin}${next}`)
             } else if (forwardedHost) {
                 return NextResponse.redirect(`https://${forwardedHost}${next}`)
